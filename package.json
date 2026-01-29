@@ -9,13 +9,28 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:dhikr-reminder.selectAdhkar",
+    "onCommand:dhikr-reminder.changeAdhkar"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "dhikr-reminder.helloWorld",
-        "title": "Hello World"
+        "command": "dhikr-reminder.selectCategory",
+        "title": "Wisdom: Select Category",
+        "category": "DhikrReminder"
+      },
+      {
+        "command": "dhikr-reminder.changeCategory",
+        "title": "Wisdom: Change Category",
+        "category": "DhikrReminder"
+      },
+      {
+        "command": "dhikr-reminder.showWisdom",
+        "title": "Wisdom: Show Dhikr",
+        "category": "DhikrReminder"
       }
     ]
   },
