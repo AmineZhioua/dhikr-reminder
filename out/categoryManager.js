@@ -37,16 +37,16 @@ exports.CategoryManager = void 0;
 const vscode = __importStar(require("vscode"));
 class CategoryManager {
     context;
-    static GLOBAL_STATE_KEY = 'wisdompop_selected_category';
     constructor(context) {
         this.context = context;
+        //
     }
     // Show category selection on startup
     async promptCategoryOnStartup() {
         const config = vscode.workspace.getConfiguration('dhikr-reminder');
         const autoPrompt = config.get('autoPrompt', true);
         if (!autoPrompt) {
-            const defaultCategory = config.get('defaultCategory', 'wise');
+            const defaultCategory = config.get('defaultCategory', 'Morning Dhikr');
             return this.setSelectedCategory(defaultCategory);
         }
         return this.showCategorySelection();
@@ -55,22 +55,34 @@ class CategoryManager {
     async showCategorySelection() {
         const categories = [
             {
-                label: '$(lightbulb) Wise & Inspirational',
-                description: 'Thoughtful quotes for motivation',
-                detail: 'Programming wisdom, life lessons, and inspirational thoughts',
-                category: 'wise'
+                label: '$(lightbulb) Morning Dhikr',
+                description: 'Adhkar for morning remembrance',
+                detail: 'Remembrances and supplications for the morning time (from Fajr until sunrise/noon)',
+                category: 'Morning Dhikr'
             },
             {
-                label: '$(smiley) Fun & Humorous',
-                description: 'Lighthearted programming jokes',
-                detail: 'Developer humor, funny quotes, and programming jokes',
-                category: 'fun'
+                label: '$(watch) Evening Dhikr',
+                description: 'Adhkar for evening remembrance',
+                detail: 'Remembrances and supplications for the evening time (from Asr until Maghrib/until night)',
+                category: 'Evening Dhikr'
             },
             {
-                label: '$(zap) Stupid & Random',
-                description: 'Silly, random, and absurd quotes',
-                detail: 'Dumb humor, procrastination quotes, and silly thoughts',
-                category: 'stupid'
+                label: '$(pray) After Salah',
+                description: 'Adhkar after each prayer',
+                detail: 'Remembrances and supplications to be recited after the five daily prayers',
+                category: 'After Salah'
+            },
+            {
+                label: '$(moon) Before Sleep',
+                description: 'Adhkar before sleeping',
+                detail: 'Remembrances and supplications to recite before going to bed',
+                category: 'Before Sleep'
+            },
+            {
+                label: '$(sun) Waking Up',
+                description: 'Adhkar upon waking up',
+                detail: 'Remembrances and supplications to recite when waking up from sleep',
+                category: 'Waking Up'
             },
         ];
         const selection = await vscode.window.showQuickPick(categories, {
@@ -83,33 +95,18 @@ class CategoryManager {
         }
         const category = selection.category;
         await this.setSelectedCategory(category);
-        // Show confirmation
-        vscode.window.showInformationMessage(`Selected category: ${category.charAt(0).toUpperCase() + category.slice(1)}`, 'Show First Quote').then(choice => {
-            if (choice === 'Show First Quote') {
-                vscode.commands.executeCommand('dhikr-reminder.showDhikr');
-            }
-        });
         return category;
     }
     // Get currently selected category
     getSelectedCategory() {
         const config = vscode.workspace.getConfiguration('wisdompop');
         const rememberChoice = config.get('rememberChoice', true);
-        if (rememberChoice) {
-            const storedCategory = this.context.globalState.get(CategoryManager.GLOBAL_STATE_KEY);
-            if (storedCategory) {
-                return storedCategory;
-            }
-        }
-        return config.get('defaultCategory', 'wise');
+        return config.get('defaultCategory', 'Morning Dhikr');
     }
     // Set selected category
     async setSelectedCategory(category) {
         const config = vscode.workspace.getConfiguration('dhikr-reminder');
         const rememberChoice = config.get('rememberChoice', true);
-        if (rememberChoice) {
-            await this.context.globalState.update(CategoryManager.GLOBAL_STATE_KEY, category);
-        }
         // Update status bar if exists
         this.updateStatusBar(category);
     }
@@ -120,24 +117,6 @@ class CategoryManager {
     // Open settings
     openSettings() {
         vscode.commands.executeCommand('workbench.action.openSettings', '@ext:your-publisher.wisdompop');
-    }
-    // Get category emoji
-    getCategoryEmoji(category) {
-        switch (category) {
-            case 'wise': return '💡';
-            case 'fun': return '😂';
-            case 'stupid': return '🤪';
-            default: return '✨';
-        }
-    }
-    // Get category display name
-    getCategoryDisplayName(category) {
-        switch (category) {
-            case 'wise': return 'Wise & Inspirational';
-            case 'fun': return 'Fun & Humorous';
-            case 'stupid': return 'Stupid & Random';
-            default: return 'Unknown';
-        }
     }
 }
 exports.CategoryManager = CategoryManager;

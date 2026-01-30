@@ -50,7 +50,7 @@ function activate(context) {
             if (selectedCategory) {
                 // Show first quote after 2 seconds
                 setTimeout(() => {
-                    showWisdomQuote(selectedCategory, categoryManager);
+                    showAdhkar(selectedCategory, categoryManager);
                 }, 2000);
             }
         }
@@ -62,46 +62,91 @@ function activate(context) {
     let selectCategoryCommand = vscode.commands.registerCommand('dhikr-reminder.selectCategory', async () => {
         const category = await categoryManager.showCategorySelection();
         if (category) {
-            showWisdomQuote(category, categoryManager);
+            showAdhkar(category, categoryManager);
         }
     });
     // Command to manually show wisdom
     let showWisdomCommand = vscode.commands.registerCommand('dhikr-reminder.showDhikr', () => {
         const category = categoryManager.getSelectedCategory();
-        showWisdomQuote(category, categoryManager);
+        showAdhkar(category, categoryManager);
     });
     // Register command to change category
     let changeCategoryCommand = vscode.commands.registerCommand('dhikr-reminder.changeCategory', async () => {
-        await categoryManager.showCategorySelection();
+        const category = await categoryManager.showCategorySelection();
+        if (category) {
+            showAdhkar(category, categoryManager);
+        }
     });
     // Add commands to subscriptions
     context.subscriptions.push(selectCategoryCommand, showWisdomCommand, changeCategoryCommand);
-    // Schedule periodic quotes based on category
-    schedulePeriodicQuotes(categoryManager);
 }
-;
-function showWisdomQuote(category, categoryManager) {
-    const quote = (0, adhkar_1.getRandomDhikr)(category);
-    const emoji = categoryManager.getCategoryEmoji(category);
-    const categoryName = categoryManager.getCategoryDisplayName(category);
-    // Format the quote for display
-    const fullQuote = quote.author
-        ? `${quote.text} — ${quote.author}`
-        : quote.text;
+function showAdhkar(category, categoryManager, dhikrIndex = 0, counter = 0) {
+    const adhkarList = adhkar_1.wisdomCategories[category];
+    const currentDhikr = adhkarList[dhikrIndex];
+    const targetCount = parseInt(currentDhikr.count);
+    // Check if counter reached the goal
+    const isComplete = counter >= targetCount;
+    const completionEmoji = isComplete ? '✅ ' : '';
+    // Format the dhikr for display
+    const fullDhikr = `${completionEmoji}${currentDhikr.content}\n\nCount: ${currentDhikr.count} | Counter: ${counter}`;
+    // Add description if available
+    const displayMessage = currentDhikr.description
+        ? `${fullDhikr}\n\n📝 ${currentDhikr.description}`
+        : fullDhikr;
+    // Display the notification toast
+    vscode.window.showInformationMessage(displayMessage, 'Next', 'Increment +', 'Change Adhkar').then(choice => {
+        if (choice === 'Next') {
+            // Move to next dhikr
+            const nextIndex = dhikrIndex + 1;
+            // Check if we've completed all dhikr in this category
+            if (nextIndex >= adhkarList.length) {
+                // Show success message
+                vscode.window.showInformationMessage(`🎉 Congratulations! You have completed all ${category}! 🎉`, 'Restart Category', 'Change Category').then(successChoice => {
+                    if (successChoice === 'Restart Category') {
+                        // Restart from the beginning
+                        showAdhkar(category, categoryManager, 0, 0);
+                    }
+                    else if (successChoice === 'Change Category') {
+                        vscode.commands.executeCommand('dhikr-reminder.changeCategory');
+                    }
+                });
+            }
+            else {
+                // Show next dhikr with counter reset
+                showAdhkar(category, categoryManager, nextIndex, 0);
+            }
+        }
+        else if (choice === 'Increment +') {
+            // Check if current dhikr is complete
+            if (counter >= targetCount) {
+                // Auto-advance to next dhikr
+                const nextIndex = dhikrIndex + 1;
+                if (nextIndex >= adhkarList.length) {
+                    // Show success message
+                    vscode.window.showInformationMessage(`🎉 Congratulations! You have completed all ${category}! 🎉`, 'Restart Category', 'Change Category').then(successChoice => {
+                        if (successChoice === 'Restart Category') {
+                            showAdhkar(category, categoryManager, 0, 0);
+                        }
+                        else if (successChoice === 'Change Category') {
+                            vscode.commands.executeCommand('dhikr-reminder.changeCategory');
+                        }
+                    });
+                }
+                else {
+                    showAdhkar(category, categoryManager, nextIndex, 0);
+                }
+            }
+            else {
+                // Increment counter for current dhikr
+                showAdhkar(category, categoryManager, dhikrIndex, counter + 1);
+            }
+        }
+        else if (choice === 'Change Adhkar') {
+            // Open category selection
+            vscode.commands.executeCommand('dhikr-reminder.changeCategory');
+        }
+    });
 }
-;
-function schedulePeriodicQuotes(categoryManager) {
-    const config = vscode.workspace.getConfiguration('dhikr-reminder');
-    const intervalInMinutes = config.get('intervalInMinutes', 60);
-    if (intervalInMinutes > 0) {
-        setInterval(() => {
-            const category = categoryManager.getSelectedCategory();
-            showWisdomQuote(category, categoryManager);
-        }, intervalInMinutes * 60 * 1000);
-    }
-}
-;
 // This method is called when your extension is deactivated
 function deactivate() { }
-;
 //# sourceMappingURL=extension.js.map
