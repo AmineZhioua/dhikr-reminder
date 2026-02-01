@@ -46,7 +46,7 @@ function activate(context) {
     // Show category selection on startup (with delay)
     setTimeout(async () => {
         try {
-            const selectedCategory = await categoryManager.promptCategoryOnStartup();
+            const selectedCategory = await categoryManager.showCategorySelection();
             if (selectedCategory) {
                 // Show first dhikr after 2 seconds
                 setTimeout(() => {

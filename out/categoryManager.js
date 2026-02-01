@@ -41,40 +41,35 @@ class CategoryManager {
         this.context = context;
         //
     }
-    // Show category selection on startup
-    async promptCategoryOnStartup() {
-        const config = vscode.workspace.getConfiguration('dhikr-reminder');
-        return this.showCategorySelection();
-    }
     // Show interactive category selection
     async showCategorySelection() {
         const categories = [
             {
-                label: '$(lightbulb) Morning Dhikr',
+                label: 'Morning Dhikr',
                 description: 'Adhkar for morning remembrance',
                 detail: 'Remembrances and supplications for the morning time (from Fajr until sunrise/noon)',
                 category: 'Morning Dhikr'
             },
             {
-                label: '$(watch) Evening Dhikr',
+                label: 'Evening Dhikr',
                 description: 'Adhkar for evening remembrance',
                 detail: 'Remembrances and supplications for the evening time (from Asr until Maghrib/until night)',
                 category: 'Evening Dhikr'
             },
             {
-                label: '$(pray) After Salah',
+                label: 'After Salah',
                 description: 'Adhkar after each prayer',
                 detail: 'Remembrances and supplications to be recited after the five daily prayers',
                 category: 'After Salah'
             },
             {
-                label: '$(moon) Before Sleep',
+                label: 'Before Sleep',
                 description: 'Adhkar before sleeping',
                 detail: 'Remembrances and supplications to recite before going to bed',
                 category: 'Before Sleep'
             },
             {
-                label: '$(sun) Waking Up',
+                label: 'Waking Up',
                 description: 'Adhkar upon waking up',
                 detail: 'Remembrances and supplications to recite when waking up from sleep',
                 category: 'Waking Up'

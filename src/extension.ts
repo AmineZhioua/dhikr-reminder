@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Show category selection on startup (with delay)
 	setTimeout(async () => {
 		try {
-			const selectedCategory = await categoryManager.promptCategoryOnStartup();
+			const selectedCategory = await categoryManager.showCategorySelection();
 			
 			if (selectedCategory) {
 				// Show first dhikr after 2 seconds
