@@ -4,7 +4,7 @@
   "description": "A kind reminder of your dhikr's for better productivity",
   "version": "0.0.1",
   "icon": "./src/images/icon.png",
-  "publisher": "Amine Dev",
+  "publisher": "AmineDev",
   "engines": {
     "vscode": "^1.108.1"
   },
