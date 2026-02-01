@@ -4,12 +4,17 @@
   "description": "A kind reminder of your dhikr's for better productivity",
   "version": "0.0.1",
   "icon": "./src/images/icon.png",
+  "publisher": "Amine Dev",
   "engines": {
     "vscode": "^1.108.1"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmineZhioua/dhikr-reminder"
+  },
   "activationEvents": [
     "onStartupFinished",
     "onCommand:dhikr-reminder.selectAdhkar",
