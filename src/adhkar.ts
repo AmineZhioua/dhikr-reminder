@@ -9,7 +9,7 @@ export interface Dhikr {
 
 export type Category = "Morning Dhikr" | "Evening Dhikr" | "After Salah" | "Before Sleep" | "Waking Up";
 
-export const wisdomCategories: Record<Category, Dhikr[]> = {
+export const dhikrCategories: Record<Category, Dhikr[]> = {
     "Morning Dhikr": [
         {
             category: "Morning Dhikr",
@@ -590,14 +590,4 @@ export const wisdomCategories: Record<Category, Dhikr[]> = {
                 "لا إلهَ إلاّ اللّهُ وَحْـدَهُ لا شَـريكَ له، لهُ المُلـكُ ولهُ الحَمـد، وهوَ على كلّ شيءٍ قدير، سُـبْحانَ اللهِ، والحمْـدُ لله ، ولا إلهَ إلاّ اللهُ واللهُ أكبَر، وَلا حَولَ وَلا قوّة إلاّ باللّهِ العليّ العظيم. رَبِّ اغْفرْ لي.",
         },
     ],
-};
-
-export function getRandomDhikr(category: Category): Dhikr {
-  const quotes = wisdomCategories[category];
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
-};
-
-export function getDhikrCount(category: Category): number {
-  return wisdomCategories[category].length;
 };

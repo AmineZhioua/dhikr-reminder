@@ -10,12 +10,6 @@ export class CategoryManager {
     // Show category selection on startup
     public async promptCategoryOnStartup(): Promise<Category | null> {
         const config = vscode.workspace.getConfiguration('dhikr-reminder');
-        const autoPrompt = config.get<boolean>('autoPrompt', true);
-        
-        if(!autoPrompt) {
-            const defaultCategory = config.get<Category>('defaultCategory', 'Morning Dhikr');
-            return this.setSelectedCategory(defaultCategory);
-        }
         
         return this.showCategorySelection();
     }
@@ -56,8 +50,8 @@ export class CategoryManager {
         ];
         
         const selection = await vscode.window.showQuickPick(categories, {
-            placeHolder: 'Choose your daily wisdom category',
-            title: '💭 WisdomPop - Select Your Vibe',
+            placeHolder: 'Choose your Dhikr category',
+            title: 'Dhikr Reminder Extension',
             ignoreFocusOut: true
         });
         
@@ -66,36 +60,7 @@ export class CategoryManager {
         }
         
         const category = selection.category as Category;
-
-        await this.setSelectedCategory(category);
         
         return category;
-    }
-    
-    // Get currently selected category
-    public getSelectedCategory(): Category {
-        const config = vscode.workspace.getConfiguration('wisdompop');
-        const rememberChoice = config.get<boolean>('rememberChoice', true);
-        
-        return config.get<Category>('defaultCategory', 'Morning Dhikr');
-    }
-    
-    // Set selected category
-    private async setSelectedCategory(category: Category): Promise<void> {
-        const config = vscode.workspace.getConfiguration('dhikr-reminder');
-        const rememberChoice = config.get<boolean>('rememberChoice', true);
-        
-        // Update status bar if exists
-        this.updateStatusBar(category);
-    }
-    
-    // Update status bar with current category
-    private updateStatusBar(category: Category): void {
-        // This could be implemented if you want a status bar indicator
-    }
-    
-    // Open settings
-    private openSettings(): void {
-        vscode.commands.executeCommand('workbench.action.openSettings', '@ext:your-publisher.wisdompop');
     }
 }

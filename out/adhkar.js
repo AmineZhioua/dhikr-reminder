@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wisdomCategories = void 0;
-exports.getRandomDhikr = getRandomDhikr;
-exports.getDhikrCount = getDhikrCount;
+exports.dhikrCategories = void 0;
 ;
-exports.wisdomCategories = {
+exports.dhikrCategories = {
     "Morning Dhikr": [
         {
             category: "Morning Dhikr",
@@ -520,14 +518,4 @@ exports.wisdomCategories = {
         },
     ],
 };
-function getRandomDhikr(category) {
-    const quotes = exports.wisdomCategories[category];
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    return quotes[randomIndex];
-}
-;
-function getDhikrCount(category) {
-    return exports.wisdomCategories[category].length;
-}
-;
 //# sourceMappingURL=adhkar.js.map

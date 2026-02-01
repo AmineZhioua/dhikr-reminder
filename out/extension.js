@@ -48,7 +48,7 @@ function activate(context) {
         try {
             const selectedCategory = await categoryManager.promptCategoryOnStartup();
             if (selectedCategory) {
-                // Show first quote after 2 seconds
+                // Show first dhikr after 2 seconds
                 setTimeout(() => {
                     showAdhkar(selectedCategory, categoryManager);
                 }, 2000);
@@ -65,11 +65,6 @@ function activate(context) {
             showAdhkar(category, categoryManager);
         }
     });
-    // Command to manually show wisdom
-    let showWisdomCommand = vscode.commands.registerCommand('dhikr-reminder.showDhikr', () => {
-        const category = categoryManager.getSelectedCategory();
-        showAdhkar(category, categoryManager);
-    });
     // Register command to change category
     let changeCategoryCommand = vscode.commands.registerCommand('dhikr-reminder.changeCategory', async () => {
         const category = await categoryManager.showCategorySelection();
@@ -78,10 +73,11 @@ function activate(context) {
         }
     });
     // Add commands to subscriptions
-    context.subscriptions.push(selectCategoryCommand, showWisdomCommand, changeCategoryCommand);
+    context.subscriptions.push(selectCategoryCommand, changeCategoryCommand);
 }
+// Function to Display the Adhkars
 function showAdhkar(category, categoryManager, dhikrIndex = 0, counter = 0) {
-    const adhkarList = adhkar_1.wisdomCategories[category];
+    const adhkarList = adhkar_1.dhikrCategories[category];
     const currentDhikr = adhkarList[dhikrIndex];
     const targetCount = parseInt(currentDhikr.count);
     // Check if counter reached the goal
@@ -89,12 +85,8 @@ function showAdhkar(category, categoryManager, dhikrIndex = 0, counter = 0) {
     const completionEmoji = isComplete ? '✅ ' : '';
     // Format the dhikr for display
     const fullDhikr = `${completionEmoji}${currentDhikr.content}\n\nCount: ${currentDhikr.count} | Counter: ${counter}`;
-    // Add description if available
-    const displayMessage = currentDhikr.description
-        ? `${fullDhikr}\n\n📝 ${currentDhikr.description}`
-        : fullDhikr;
     // Display the notification toast
-    vscode.window.showInformationMessage(displayMessage, 'Next', 'Increment +', 'Change Adhkar').then(choice => {
+    vscode.window.showInformationMessage(fullDhikr, 'Next', 'Increment +', 'Change Adhkar').then(choice => {
         if (choice === 'Next') {
             // Move to next dhikr
             const nextIndex = dhikrIndex + 1;

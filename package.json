@@ -19,17 +19,12 @@
     "commands": [
       {
         "command": "dhikr-reminder.selectCategory",
-        "title": "Wisdom: Select Category",
+        "title": "Select Category",
         "category": "DhikrReminder"
       },
       {
         "command": "dhikr-reminder.changeCategory",
-        "title": "Wisdom: Change Category",
-        "category": "DhikrReminder"
-      },
-      {
-        "command": "dhikr-reminder.showWisdom",
-        "title": "Wisdom: Show Dhikr",
+        "title": "Change Category",
         "category": "DhikrReminder"
       }
     ]

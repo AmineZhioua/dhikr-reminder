@@ -44,11 +44,6 @@ class CategoryManager {
     // Show category selection on startup
     async promptCategoryOnStartup() {
         const config = vscode.workspace.getConfiguration('dhikr-reminder');
-        const autoPrompt = config.get('autoPrompt', true);
-        if (!autoPrompt) {
-            const defaultCategory = config.get('defaultCategory', 'Morning Dhikr');
-            return this.setSelectedCategory(defaultCategory);
-        }
         return this.showCategorySelection();
     }
     // Show interactive category selection
@@ -86,37 +81,15 @@ class CategoryManager {
             },
         ];
         const selection = await vscode.window.showQuickPick(categories, {
-            placeHolder: 'Choose your daily wisdom category',
-            title: '💭 WisdomPop - Select Your Vibe',
+            placeHolder: 'Choose your Dhikr category',
+            title: 'Dhikr Reminder Extension',
             ignoreFocusOut: true
         });
         if (!selection) {
             return null; // User cancelled
         }
         const category = selection.category;
-        await this.setSelectedCategory(category);
         return category;
-    }
-    // Get currently selected category
-    getSelectedCategory() {
-        const config = vscode.workspace.getConfiguration('wisdompop');
-        const rememberChoice = config.get('rememberChoice', true);
-        return config.get('defaultCategory', 'Morning Dhikr');
-    }
-    // Set selected category
-    async setSelectedCategory(category) {
-        const config = vscode.workspace.getConfiguration('dhikr-reminder');
-        const rememberChoice = config.get('rememberChoice', true);
-        // Update status bar if exists
-        this.updateStatusBar(category);
-    }
-    // Update status bar with current category
-    updateStatusBar(category) {
-        // This could be implemented if you want a status bar indicator
-    }
-    // Open settings
-    openSettings() {
-        vscode.commands.executeCommand('workbench.action.openSettings', '@ext:your-publisher.wisdompop');
     }
 }
 exports.CategoryManager = CategoryManager;
