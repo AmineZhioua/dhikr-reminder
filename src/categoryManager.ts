@@ -41,6 +41,18 @@ export class CategoryManager {
                 detail: 'Remembrances and supplications to recite when waking up from sleep',
                 category: 'Waking Up' as Category
             },
+            {
+                label: 'Muhammad BPUH Duaa\'s',
+                description: 'Duaa\'s from our prophet Muhammad PBUH',
+                detail: 'Duaa\'s that our beloved prophet Muhammad PBUH used to say',
+                category: 'Muhammad BPUH Duaa\'s' as Category
+            },
+            {
+                label: 'Quranic Duaa\'s',
+                description: 'Duaa\'s from the Quran',
+                detail: 'Duaa\'s that was extracted from the Quran',
+                category: 'Quranic Duaa\'s' as Category
+            },
         ];
         
         const selection = await vscode.window.showQuickPick(categories, {
